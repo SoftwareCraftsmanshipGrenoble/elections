@@ -1,9 +1,6 @@
 package org.elections;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Elections {
     List<String> candidates = new ArrayList<>();
@@ -23,8 +20,11 @@ public class Elections {
 
     public Map<String, String> results() {
         Map<String, String> results = new HashMap<>();
+        Integer nbVotes = votes.stream().reduce(0, Integer::sum);
+
         for (int i = 0; i < votes.size(); i++) {
-            results.put(candidates.get(i), votes.get(i).toString());
+            Integer candidatResult = (votes.get(i)*100)/nbVotes;
+            results.put(candidates.get(i), candidatResult.toString() + "%");
         }
         return results;
     }

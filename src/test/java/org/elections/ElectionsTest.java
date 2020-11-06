@@ -19,7 +19,7 @@ class ElectionsTest {
 
         Map<String, String> results = elections.results();
 
-        Map<String, String> expectedResults = Map.of("Jerry" , "1", "Johnny", "1", "Michel", "0");
+        Map<String, String> expectedResults = Map.of("Jerry" , "50%", "Johnny", "50%", "Michel", "0%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 }
