@@ -15,9 +15,13 @@ class ElectionsTest {
         elections.addCandidate("Johnny");
 
         elections.voteFor("Bob", "Jerry", "Bob's District");
+        elections.voteFor("Jerry", "Jerry", "Jerry's District");
         elections.voteFor("Anna", "Johnny", "Anna's District");
+        elections.voteFor("Johnny", "Johnny", "Johnny's District");
         elections.voteFor("Matt", "Donald", "Matt's District");
         elections.voteFor("Jess", "Joe", "Jess's District");
+        elections.voteFor("Simon", "", "Simon's District");
+        elections.voteFor("Carole", "", "Carole's District");
 
         Map<String, String> results = elections.results();
 
@@ -25,7 +29,8 @@ class ElectionsTest {
                 "Jerry", "25%",
                 "Johnny", "25%",
                 "Michel", "0%",
-                "Null", "50%");
+                "Blank", "25%",
+                "Null", "25%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 }

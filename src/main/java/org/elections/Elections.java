@@ -30,6 +30,7 @@ public class Elections {
         Map<String, String> results = new HashMap<>();
         Integer nbVotes = votes.stream().reduce(0, Integer::sum);
         Integer nullVotes = 0;
+        Integer blankVotes = 0;
 
         for (int i = 0; i < votes.size(); i++) {
             Integer candidatResult = (votes.get(i) * 100) / nbVotes;
@@ -37,9 +38,15 @@ public class Elections {
             if (officialCandidates.contains(candidate)) {
                 results.put(candidate, candidatResult.toString() + "%");
             } else {
-                nullVotes += votes.get(i);
+                if (candidates.get(i).isEmpty()) {
+                    blankVotes += votes.get(i);
+                } else {
+                    nullVotes += votes.get(i);
+                }
             }
         }
+
+        results.put("Blank", ((Integer) ((blankVotes * 100) / nbVotes)).toString() + "%");
 
         Integer nullResult = (nullVotes * 100) / nbVotes;
         results.put("Null", nullResult.toString() + "%");
