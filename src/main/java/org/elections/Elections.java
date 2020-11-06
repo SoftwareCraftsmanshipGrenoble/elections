@@ -31,9 +31,14 @@ public class Elections {
         Integer nbVotes = votes.stream().reduce(0, Integer::sum);
         Integer nullVotes = 0;
         Integer blankVotes = 0;
+        int nbValidVotes = 0;
+        for (int i = 0; i < officialCandidates.size(); i++) {
+            int index = candidates.indexOf(officialCandidates.get(i));
+            nbValidVotes += votes.get(index);
+        }
 
         for (int i = 0; i < votes.size(); i++) {
-            Integer candidatResult = (votes.get(i) * 100) / nbVotes;
+            Integer candidatResult = (votes.get(i) * 100) / nbValidVotes;
             String candidate = candidates.get(i);
             if (officialCandidates.contains(candidate)) {
                 results.put(candidate, candidatResult.toString() + "%");
