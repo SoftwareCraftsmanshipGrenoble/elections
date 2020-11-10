@@ -3,13 +3,20 @@ package org.elections;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 class ElectionsTest {
 
     @Test
     void electionWithoutDistricts() {
-        Elections elections = new Elections(false);
+        Map<String, List<String>> list = Map.of(
+                "District 1", Arrays.asList("Bob", "Anna", "Jess", "July"),
+                "District 2", Arrays.asList("Jerry", "Simon"),
+                "District 3", Arrays.asList("Johnny", "Matt", "Carole")
+        );
+        Elections elections = new Elections(list, false);
         elections.addCandidate("Michel");
         elections.addCandidate("Jerry");
         elections.addCandidate("Johnny");
@@ -30,13 +37,19 @@ class ElectionsTest {
                 "Johnny", "50%",
                 "Michel", "0%",
                 "Blank", "25%",
-                "Null", "25%");
+                "Null", "25%",
+                "Abstention", "11,11%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 
     @Test
     void electionWithDistricts() {
-        Elections elections = new Elections(true);
+        Map<String, List<String>> list = Map.of(
+                "District 1", Arrays.asList("Bob", "Anna", "Jess", "July"),
+                "District 2", Arrays.asList("Jerry", "Simon"),
+                "District 3", Arrays.asList("Johnny", "Matt", "Carole")
+        );
+        Elections elections = new Elections(list, true);
         elections.addCandidate("Michel");
         elections.addCandidate("Jerry");
         elections.addCandidate("Johnny");
@@ -58,7 +71,8 @@ class ElectionsTest {
                 "Johnny", "33,33%",
                 "Michel", "0%",
                 "Blank", "22%",
-                "Null", "22%");
+                "Null", "22%",
+                "Abstention", "0%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 }

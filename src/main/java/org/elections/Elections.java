@@ -11,10 +11,12 @@ public class Elections {
     List<String> officialCandidates = new ArrayList<>();
     ArrayList<Integer> votesWithoutDistricts = new ArrayList<>();
     Map<String, ArrayList<Integer>> votesWithDistricts;
-    private boolean withDisctrict;
+    private Map<String, List<String>> list;
+    private boolean withDistrict;
 
-    public Elections(boolean withDistrict) {
-        this.withDisctrict = withDistrict;
+    public Elections(Map<String, List<String>> list, boolean withDistrict) {
+        this.list = list;
+        this.withDistrict = withDistrict;
 
         votesWithDistricts = new HashMap<>();
         votesWithDistricts.put("District 1", new ArrayList<>());
@@ -32,7 +34,7 @@ public class Elections {
     }
 
     public void voteFor(String elector, String candidate, String electorDistrict) {
-        if (!withDisctrict) {
+        if (!withDistrict) {
             if (candidates.contains(candidate)) {
                 int index = candidates.indexOf(candidate);
                 votesWithoutDistricts.set(index, votesWithoutDistricts.get(index) + 1);
@@ -48,10 +50,10 @@ public class Elections {
                     districtVotes.set(index, districtVotes.get(index) + 1);
                 } else {
                     candidates.add(candidate);
-                    votesWithDistricts.forEach((district, votes) ->{
+                    votesWithDistricts.forEach((district, votes) -> {
                         votes.add(0);
                     });
-                    districtVotes.set(candidates.size()-1, districtVotes.get(candidates.size()-1) + 1);
+                    districtVotes.set(candidates.size() - 1, districtVotes.get(candidates.size() - 1) + 1);
                 }
             }
         }
@@ -64,7 +66,7 @@ public class Elections {
         Integer blankVotes = 0;
         int nbValidVotes = 0;
 
-        if (!withDisctrict) {
+        if (!withDistrict) {
             nbVotes = votesWithoutDistricts.stream().reduce(0, Integer::sum);
             for (int i = 0; i < officialCandidates.size(); i++) {
                 int index = candidates.indexOf(officialCandidates.get(i));
@@ -139,6 +141,11 @@ public class Elections {
 
         Integer nullResult = (nullVotes * 100) / nbVotes;
         results.put("Null", nullResult.toString() + "%");
+
+        int nbElectors = list.values().stream().map(List::size).reduce(0, Integer::sum);
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        results.put("Abstention", df.format(100 - ((float) nbVotes * 100 / nbElectors)) + "%");
 
         return results;
     }
