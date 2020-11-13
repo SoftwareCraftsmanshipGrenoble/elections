@@ -36,32 +36,33 @@ public class Elections {
     public void voteFor(String elector, String candidate, String electorDistrict) {
 	    ElectionData electionData = voteFor(
 	    		candidate, electorDistrict, withDistrict,
-			    unmodifiableList(candidates),
-			    unmodifiableList(votesWithoutDistricts),
-			    unmodifiableMap(votesWithDistricts)
+			    new ElectionData(
+				    unmodifiableList(candidates),
+				    unmodifiableList(votesWithoutDistricts),
+				    unmodifiableMap(votesWithDistricts)
+			    )
 	    );
 	    candidates = electionData.candidates;
-	    votesWithoutDistricts = electionData.votesWithoutDistrict;
+	    votesWithoutDistricts = electionData.votesWithoutDistricts;
 	    votesWithDistricts = electionData.votesWithDistricts;
     }
 
     private static class ElectionData {
 	    final List<String> candidates;
-	    final List<Integer> votesWithoutDistrict;
+	    final List<Integer> votesWithoutDistricts;
 	    final Map<String, ArrayList<Integer>> votesWithDistricts;
 
-	    public ElectionData(List<String> candidates, List<Integer> votesWithoutDistrict, Map<String, ArrayList<Integer>> votesWithDistricts) {
+	    public ElectionData(List<String> candidates, List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
 		    this.candidates = candidates;
-		    this.votesWithoutDistrict = votesWithoutDistrict;
+		    this.votesWithoutDistricts = votesWithoutDistricts;
 		    this.votesWithDistricts = votesWithDistricts;
 	    }
     }
 
-	private static ElectionData voteFor(String candidate, String electorDistrict, boolean withDistrict, List<String> candidates,
-	                                    List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
-    	List<String> newCandidates = new ArrayList<>(candidates);
-    	List<Integer> newVotesWithoutDistrict = new ArrayList<>(votesWithoutDistricts);
-		Map<String, ArrayList<Integer>> newVotesWithDistricts = new HashMap<>(votesWithDistricts);
+	private static ElectionData voteFor(String candidate, String electorDistrict, boolean withDistrict, ElectionData electionData) {
+    	List<String> newCandidates = new ArrayList<>(electionData.candidates);
+    	List<Integer> newVotesWithoutDistrict = new ArrayList<>(electionData.votesWithoutDistricts);
+		Map<String, ArrayList<Integer>> newVotesWithDistricts = new HashMap<>(electionData.votesWithDistricts);
 		if (!withDistrict) {
 			if (newCandidates.contains(candidate)) {
 		        int index = newCandidates.indexOf(candidate);
