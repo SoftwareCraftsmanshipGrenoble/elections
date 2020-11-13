@@ -38,7 +38,7 @@ class ElectionsTest {
                 "Michel", "0%",
                 "Blank", "25%",
                 "Null", "25%",
-                "Abstention", "11,11%");
+                "Abstention", "11.11%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 
@@ -67,8 +67,8 @@ class ElectionsTest {
         Map<String, String> results = elections.results();
 
         Map<String, String> expectedResults = Map.of(
-                "Jerry", "66,67%",
-                "Johnny", "33,33%",
+                "Jerry", "66.67%",
+                "Johnny", "33.33%",
                 "Michel", "0%",
                 "Blank", "22%",
                 "Null", "22%",

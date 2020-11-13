@@ -1,15 +1,14 @@
 package org.elections;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.Collections.unmodifiableList;
 
 public class Elections {
     List<String> candidates = new ArrayList<>();
     List<String> officialCandidates = new ArrayList<>();
-    ArrayList<Integer> votesWithoutDistricts = new ArrayList<>();
+    List<Integer> votesWithoutDistricts = new ArrayList<>();
     Map<String, ArrayList<Integer>> votesWithDistricts;
     private Map<String, List<String>> list;
     private boolean withDistrict;
@@ -34,32 +33,57 @@ public class Elections {
     }
 
     public void voteFor(String elector, String candidate, String electorDistrict) {
-        if (!withDistrict) {
-            if (candidates.contains(candidate)) {
-                int index = candidates.indexOf(candidate);
-                votesWithoutDistricts.set(index, votesWithoutDistricts.get(index) + 1);
-            } else {
-                candidates.add(candidate);
-                votesWithoutDistricts.add(1);
-            }
-        } else {
-            if (votesWithDistricts.containsKey(electorDistrict)) {
-                ArrayList<Integer> districtVotes = votesWithDistricts.get(electorDistrict);
-                if (candidates.contains(candidate)) {
-                    int index = candidates.indexOf(candidate);
-                    districtVotes.set(index, districtVotes.get(index) + 1);
-                } else {
-                    candidates.add(candidate);
-                    votesWithDistricts.forEach((district, votes) -> {
-                        votes.add(0);
-                    });
-                    districtVotes.set(candidates.size() - 1, districtVotes.get(candidates.size() - 1) + 1);
-                }
-            }
-        }
+	    Output output = voteFor(
+	    		candidate, electorDistrict, withDistrict,
+			    unmodifiableList(candidates),
+			    unmodifiableList(votesWithoutDistricts),
+			    votesWithDistricts
+	    );
+	    candidates = output.newCandidates;
+	    votesWithoutDistricts = output.newVotesWithoutDistrict;
     }
 
-    public Map<String, String> results() {
+    private static class Output {
+	    List<String> newCandidates;
+	    List<Integer> newVotesWithoutDistrict;
+
+	    public Output(List<String> newCandidates, List<Integer> newVotesWithoutDistrict) {
+		    this.newCandidates = newCandidates;
+		    this.newVotesWithoutDistrict = newVotesWithoutDistrict;
+	    }
+    }
+
+	private static Output voteFor(String candidate, String electorDistrict, boolean withDistrict, List<String> candidates,
+	                              List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
+    	List<String> newCandidates = new ArrayList<>(candidates);
+    	List<Integer> newVotesWithoutDistrict = new ArrayList<>(votesWithoutDistricts);
+		if (!withDistrict) {
+			if (newCandidates.contains(candidate)) {
+		        int index = newCandidates.indexOf(candidate);
+				newVotesWithoutDistrict.set(index, newVotesWithoutDistrict.get(index) + 1);
+		    } else {
+		        newCandidates.add(candidate);
+				newVotesWithoutDistrict.add(1);
+		    }
+		} else {
+		    if (votesWithDistricts.containsKey(electorDistrict)) {
+		        ArrayList<Integer> districtVotes = votesWithDistricts.get(electorDistrict);
+		        if (newCandidates.contains(candidate)) {
+		            int index = newCandidates.indexOf(candidate);
+		            districtVotes.set(index, districtVotes.get(index) + 1);
+		        } else {
+		            newCandidates.add(candidate);
+		            votesWithDistricts.forEach((district, votes) -> {
+		                votes.add(0);
+		            });
+		            districtVotes.set(newCandidates.size() - 1, districtVotes.get(newCandidates.size() - 1) + 1);
+		        }
+		    }
+		}
+		return new Output(newCandidates, newVotesWithoutDistrict);
+	}
+
+	public Map<String, String> results() {
         Map<String, String> results = new HashMap<>();
         Integer nbVotes = 0;
         Integer nullVotes = 0;
