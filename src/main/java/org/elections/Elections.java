@@ -34,31 +34,31 @@ public class Elections {
     }
 
     public void voteFor(String elector, String candidate, String electorDistrict) {
-	    Output output = voteFor(
+	    ElectionData electionData = voteFor(
 	    		candidate, electorDistrict, withDistrict,
 			    unmodifiableList(candidates),
 			    unmodifiableList(votesWithoutDistricts),
 			    unmodifiableMap(votesWithDistricts)
 	    );
-	    candidates = output.newCandidates;
-	    votesWithoutDistricts = output.newVotesWithoutDistrict;
-	    votesWithDistricts = output.votesWithDistricts;
+	    candidates = electionData.candidates;
+	    votesWithoutDistricts = electionData.votesWithoutDistrict;
+	    votesWithDistricts = electionData.votesWithDistricts;
     }
 
-    private static class Output {
-	    final List<String> newCandidates;
-	    final List<Integer> newVotesWithoutDistrict;
+    private static class ElectionData {
+	    final List<String> candidates;
+	    final List<Integer> votesWithoutDistrict;
 	    final Map<String, ArrayList<Integer>> votesWithDistricts;
 
-	    public Output(List<String> newCandidates, List<Integer> newVotesWithoutDistrict, Map<String, ArrayList<Integer>> votesWithDistricts) {
-		    this.newCandidates = newCandidates;
-		    this.newVotesWithoutDistrict = newVotesWithoutDistrict;
+	    public ElectionData(List<String> candidates, List<Integer> votesWithoutDistrict, Map<String, ArrayList<Integer>> votesWithDistricts) {
+		    this.candidates = candidates;
+		    this.votesWithoutDistrict = votesWithoutDistrict;
 		    this.votesWithDistricts = votesWithDistricts;
 	    }
     }
 
-	private static Output voteFor(String candidate, String electorDistrict, boolean withDistrict, List<String> candidates,
-	                              List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
+	private static ElectionData voteFor(String candidate, String electorDistrict, boolean withDistrict, List<String> candidates,
+	                                    List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
     	List<String> newCandidates = new ArrayList<>(candidates);
     	List<Integer> newVotesWithoutDistrict = new ArrayList<>(votesWithoutDistricts);
 		Map<String, ArrayList<Integer>> newVotesWithDistricts = new HashMap<>(votesWithDistricts);
@@ -85,7 +85,7 @@ public class Elections {
 		        }
 		    }
 		}
-		return new Output(newCandidates, newVotesWithoutDistrict, newVotesWithDistricts);
+		return new ElectionData(newCandidates, newVotesWithoutDistrict, newVotesWithDistricts);
 	}
 
 	public Map<String, String> results() {
