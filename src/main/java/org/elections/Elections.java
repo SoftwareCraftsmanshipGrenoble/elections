@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
 public class Elections {
     List<String> candidates = new ArrayList<>();
@@ -37,19 +38,22 @@ public class Elections {
 	    		candidate, electorDistrict, withDistrict,
 			    unmodifiableList(candidates),
 			    unmodifiableList(votesWithoutDistricts),
-			    votesWithDistricts
+			    unmodifiableMap(votesWithDistricts)
 	    );
 	    candidates = output.newCandidates;
 	    votesWithoutDistricts = output.newVotesWithoutDistrict;
+	    votesWithDistricts = output.votesWithDistricts;
     }
 
     private static class Output {
-	    List<String> newCandidates;
-	    List<Integer> newVotesWithoutDistrict;
+	    final List<String> newCandidates;
+	    final List<Integer> newVotesWithoutDistrict;
+	    final Map<String, ArrayList<Integer>> votesWithDistricts;
 
-	    public Output(List<String> newCandidates, List<Integer> newVotesWithoutDistrict) {
+	    public Output(List<String> newCandidates, List<Integer> newVotesWithoutDistrict, Map<String, ArrayList<Integer>> votesWithDistricts) {
 		    this.newCandidates = newCandidates;
 		    this.newVotesWithoutDistrict = newVotesWithoutDistrict;
+		    this.votesWithDistricts = votesWithDistricts;
 	    }
     }
 
@@ -57,6 +61,7 @@ public class Elections {
 	                              List<Integer> votesWithoutDistricts, Map<String, ArrayList<Integer>> votesWithDistricts) {
     	List<String> newCandidates = new ArrayList<>(candidates);
     	List<Integer> newVotesWithoutDistrict = new ArrayList<>(votesWithoutDistricts);
+		Map<String, ArrayList<Integer>> newVotesWithDistricts = new HashMap<>(votesWithDistricts);
 		if (!withDistrict) {
 			if (newCandidates.contains(candidate)) {
 		        int index = newCandidates.indexOf(candidate);
@@ -66,21 +71,21 @@ public class Elections {
 				newVotesWithoutDistrict.add(1);
 		    }
 		} else {
-		    if (votesWithDistricts.containsKey(electorDistrict)) {
-		        ArrayList<Integer> districtVotes = votesWithDistricts.get(electorDistrict);
+		    if (newVotesWithDistricts.containsKey(electorDistrict)) {
+		        ArrayList<Integer> districtVotes = newVotesWithDistricts.get(electorDistrict);
 		        if (newCandidates.contains(candidate)) {
 		            int index = newCandidates.indexOf(candidate);
 		            districtVotes.set(index, districtVotes.get(index) + 1);
 		        } else {
 		            newCandidates.add(candidate);
-		            votesWithDistricts.forEach((district, votes) -> {
+		            newVotesWithDistricts.forEach((district, votes) -> {
 		                votes.add(0);
 		            });
 		            districtVotes.set(newCandidates.size() - 1, districtVotes.get(newCandidates.size() - 1) + 1);
 		        }
 		    }
 		}
-		return new Output(newCandidates, newVotesWithoutDistrict);
+		return new Output(newCandidates, newVotesWithoutDistrict, newVotesWithDistricts);
 	}
 
 	public Map<String, String> results() {
