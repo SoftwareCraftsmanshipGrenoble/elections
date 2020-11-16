@@ -141,7 +141,8 @@ public class Elections {
         int nbElectors = list.values().stream().map(List::size).reduce(0, Integer::sum);
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
-        results.put("Abstention", df.format(100 - ((float) nbVotes * 100 / nbElectors)) + "%");
+        float abstentionResult = 100 - ((float) nbVotes * 100 / nbElectors);
+        results.put("Abstention", String.format(Locale.FRENCH, "%.2f%%", abstentionResult));
 
         return results;
     }

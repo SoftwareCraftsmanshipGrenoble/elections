@@ -72,7 +72,7 @@ class ElectionsTest {
                 "Michel", "0,00%",
                 "Blank", "22,22%",
                 "Null", "22,22%",
-                "Abstention", "0%");
+                "Abstention", "0,00%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
 }
