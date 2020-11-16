@@ -37,7 +37,7 @@ class ElectionsTest {
                 "Johnny", "50,00%",
                 "Michel", "0,00%",
                 "Blank", "25,00%",
-                "Null", "25%",
+                "Null", "25,00%",
                 "Abstention", "11,11%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }
@@ -71,7 +71,7 @@ class ElectionsTest {
                 "Johnny", "33,33%",
                 "Michel", "0,00%",
                 "Blank", "22,22%",
-                "Null", "22%",
+                "Null", "22,22%",
                 "Abstention", "0%");
         Assertions.assertThat(results).isEqualTo(expectedResults);
     }

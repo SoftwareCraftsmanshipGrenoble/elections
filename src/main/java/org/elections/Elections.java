@@ -135,8 +135,8 @@ public class Elections {
         float blankResult = ((float)blankVotes * 100) / nbVotes;
         results.put("Blank", String.format(Locale.FRENCH, "%.2f%%", blankResult));
 
-        Integer nullResult = (nullVotes * 100) / nbVotes;
-        results.put("Null", nullResult.toString() + "%");
+        float nullResult = ((float)nullVotes * 100) / nbVotes;
+        results.put("Null", String.format(Locale.FRENCH, "%.2f%%", nullResult));
 
         int nbElectors = list.values().stream().map(List::size).reduce(0, Integer::sum);
         DecimalFormat df = new DecimalFormat();
