@@ -132,7 +132,8 @@ public class Elections {
             }
         }
 
-        results.put("Blank", ((Integer) ((blankVotes * 100) / nbVotes)).toString() + "%");
+        float blankResult = ((float)blankVotes * 100) / nbVotes;
+        results.put("Blank", String.format(Locale.FRENCH, "%.2f%%", blankResult));
 
         Integer nullResult = (nullVotes * 100) / nbVotes;
         results.put("Null", nullResult.toString() + "%");
