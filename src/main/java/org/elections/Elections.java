@@ -102,12 +102,12 @@ public class Elections {
                 officialCandidatesResult.put(candidates.get(i), 0);
             }
             for (Map.Entry<String, ArrayList<Integer>> entry : votesWithDistricts.entrySet()) {
-                ArrayList<Integer> districtResult = new ArrayList<>();
+                ArrayList<Float> districtResult = new ArrayList<>();
                 ArrayList<Integer> districtVotes = entry.getValue();
                 for (int i = 0; i < districtVotes.size(); i++) {
-                    Integer candidateResult = 0;
+                    float candidateResult = 0;
                     if (nbValidVotes != 0)
-                        candidateResult = (districtVotes.get(i) * 100) / nbValidVotes;
+                        candidateResult = ((float)districtVotes.get(i) * 100) / nbValidVotes;
                     String candidate = candidates.get(i);
                     if (officialCandidates.contains(candidate)) {
                         districtResult.add(candidateResult);
