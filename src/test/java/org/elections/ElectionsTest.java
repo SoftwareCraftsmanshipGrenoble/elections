@@ -33,9 +33,9 @@ class ElectionsTest {
         Map<String, String> results = elections.results();
 
         Map<String, String> expectedResults = Map.of(
-                "Jerry", "50%",
-                "Johnny", "50%",
-                "Michel", "0%",
+                "Jerry", "50,00%",
+                "Johnny", "50,00%",
+                "Michel", "0,00%",
                 "Blank", "25%",
                 "Null", "25%",
                 "Abstention", "11,11%");
@@ -69,7 +69,7 @@ class ElectionsTest {
         Map<String, String> expectedResults = Map.of(
                 "Jerry", "66,67%",
                 "Johnny", "33,33%",
-                "Michel", "0%",
+                "Michel", "0,00%",
                 "Blank", "22%",
                 "Null", "22%",
                 "Abstention", "0%");

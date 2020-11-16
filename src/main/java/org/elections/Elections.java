@@ -1,10 +1,7 @@
 package org.elections;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Elections {
     List<String> candidates = new ArrayList<>();
@@ -74,10 +71,10 @@ public class Elections {
             }
 
             for (int i = 0; i < votesWithoutDistricts.size(); i++) {
-                Integer candidatResult = (votesWithoutDistricts.get(i) * 100) / nbValidVotes;
+                Float candidatResult = ((float)votesWithoutDistricts.get(i) * 100) / nbValidVotes;
                 String candidate = candidates.get(i);
                 if (officialCandidates.contains(candidate)) {
-                    results.put(candidate, candidatResult.toString() + "%");
+                    results.put(candidate, String.format(Locale.FRENCH, "%.2f%%", candidatResult));
                 } else {
                     if (candidates.get(i).isEmpty()) {
                         blankVotes += votesWithoutDistricts.get(i);
@@ -131,9 +128,7 @@ public class Elections {
             }
             for (int i = 0; i < officialCandidatesResult.size(); i++) {
                 Float ratioCandidate = ((float) officialCandidatesResult.get(candidates.get(i))) / officialCandidatesResult.size() * 100;
-                DecimalFormat df = new DecimalFormat();
-                df.setMaximumFractionDigits(2);
-                results.put(candidates.get(i), df.format(ratioCandidate) + "%");
+                results.put(candidates.get(i), String.format(Locale.FRENCH, "%.2f%%", ratioCandidate));
             }
         }
 
