@@ -34,6 +34,12 @@ TEST_CASE("ElectionWithoutDistricts")
             {"Null", "25,00%"},
             {"Abstention", "11,11%"}};
 
+        CHECK_EQ(expectedResults["Jerry"], results["Jerry"]);
+        CHECK_EQ(expectedResults["Johnny"], results["Johnny"]);
+        CHECK_EQ(expectedResults["Michel"], results["Michel"]);
+        CHECK_EQ(expectedResults["Blank"], results["Blank"]);
+        CHECK_EQ(expectedResults["Null"], results["Null"]);
+        CHECK_EQ(expectedResults["Abstention"], results["Abstention"]);
         CHECK_EQ(expectedResults, results);
 }
 
@@ -68,5 +74,11 @@ TEST_CASE("ElectionWithDistricts")
             {"Null", "22,22%"},
             {"Abstention", "0,00%"}};
 
+        CHECK_EQ(expectedResults["Jerry"], results["Jerry"]);
+        CHECK_EQ(expectedResults["Johnny"], results["Johnny"]);
+        CHECK_EQ(expectedResults["Michel"], results["Michel"]);
+        CHECK_EQ(expectedResults["Blank"], results["Blank"]);
+        CHECK_EQ(expectedResults["Null"], results["Null"]);
+        CHECK_EQ(expectedResults["Abstention"], results["Abstention"]);
         CHECK_EQ(expectedResults, results);
 }
