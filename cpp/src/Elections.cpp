@@ -33,7 +33,7 @@ void Elections::voteFor(string elector, string candidate, string electorDistrict
     {
         if (votesWithDistricts.contains(electorDistrict))
         {
-            vector<int> districtVotes = votesWithDistricts[electorDistrict];
+            vector<int>& districtVotes = votesWithDistricts[electorDistrict];
             if (count(candidates.begin(), candidates.end(), candidate) > 0)
             {
                 int index = find(candidates.begin(), candidates.end(), candidate) - candidates.begin();
@@ -108,7 +108,8 @@ map<string, string> Elections::results()
         for (auto entry : votesWithDistricts)
         {
             vector<int> districtVotes = entry.second;
-            nbVotes += accumulate(districtVotes.begin(), districtVotes.end(), 0);
+            int nbVotesPerDistrict = accumulate(districtVotes.begin(), districtVotes.end(), 0);
+            nbVotes += nbVotesPerDistrict;
         }
 
         for (int i = 0; i < officialCandidates.size(); i++)
