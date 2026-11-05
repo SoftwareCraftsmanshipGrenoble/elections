@@ -4,14 +4,88 @@ version = "0.1.0"
 description = "Elections kata"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+
+dependencies = [
+    "pyparsing>=3.2.0",
+]
 
 [dependency-groups]
-dev = ["pytest>=8.0"]
+# Dépendances de DÉVELOPPEMENT (Spécifique uv)
+dev = [
+    "approvaltests>=16.2.2",
+    "coverage[toml]>=7.6.0",
+    "hypothesis>=6.151.12",
+    "mutmut>=3.5.0",
+    "mypy>=1.19.1",
+    "pre-commit>=4.5.1",
+    "pytest>=8.0.0",
+    "pytest-approvaltests>=0.2.3",
+    "pytest-assertions>=0.5.0",
+    "pytest-cov>=6.0.0",
+    "pytest-testdox>=3.1.0",
+    "pytest-watch>=4.2.0",
+    "ruff>=0.15.0",
+    "taskipy>=1.14.1",
+]
 
 [build-system]
 requires = ["uv_build>=0.8,<0.11"]
 build-backend = "uv_build"
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+
+[tool.ruff.lint]
+# Sélection rigoureuse des règles (Clean Code)
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (imports)
+    "C90", # mccabe complexity
+    "N",   # pep8-naming
+    "S",   # bandit (security)
+    "B",   # flake8-bugbear
+    "RUF", # ruff-specific rules
+]
+ignore = []
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.format]
+quote-style = "double" # Standard Black, plus pérenne
+indent-style = "space"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]  # Autorise 'assert' uniquement dans les fichiers de test
+
+[tool.mypy]
+strict = true
+python_version = "3.11"
+mypy_path = "src"
 
 [tool.pytest.ini_options]
+addopts = "-ra -q --testdox --cov=src"
+pythonpath = ["src"]
 testpaths = ["tests"]
+
+
+[tool.taskipy.tasks]
+# Analyse statique
+lint = "uv run ruff check ."
+lint-fix = "uv run ruff check . --fix"
+
+# Formatage du code
+format = "uv run ruff format ."
+format-check = "uv run ruff format --check ."
+
+# Types et tests
+typecheck = "uv run mypy src/"
+test = "uv run pytest"
+
+# Nettoyage de l'environnement
+clean = "uv run python -c \"import shutil; [shutil.rmtree(p, ignore_errors=True) for p in ['dist', 'coverage', '.pytest_cache', '.mypy_cache']]\""
+
+# Pipeline complète
+check = "task lint && task format-check && task typecheck && task test"
